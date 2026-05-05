@@ -329,47 +329,82 @@
     </section>
 
     <!-- LEAD MAGNET / CONTACT ANCHOR -->
-    <section id="lead" class="px-6 py-18 pb-24 sm:px-8 lg:px-12 lg:py-28">
-      <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center">
-        <div class="fade-in lg:col-span-7">
-          <p class="text-sm uppercase tracking-[0.3em] text-forest/55">Lead magnet</p>
-          <h2 class="mt-4 font-serif text-4xl leading-tight text-forest sm:text-5xl">
-            The Self-Help Loop Exit Strategy
-          </h2>
-          <p class="mt-5 max-w-2xl text-lg leading-8 text-forest/75">
-            A guide for the self-aware leader. 5 shifts to stop over-thinking, end the cycle of "more learning," and start your next chapter.
-          </p>
-        </div>
+<section id="lead" class="px-6 py-18 pb-24 sm:px-8 lg:px-12 lg:py-28">
+  <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center">
+    <div class="fade-in lg:col-span-7">
+      <p class="text-sm uppercase tracking-[0.3em] text-forest/55">Lead magnet</p>
+      <h2 class="mt-4 font-serif text-4xl leading-tight text-forest sm:text-5xl">
+        The Self-Help Loop Exit Strategy
+      </h2>
+      <p class="mt-5 max-w-2xl text-lg leading-8 text-forest/75">
+        A guide for the self-aware leader. 5 shifts to stop over-thinking, end the cycle of "more learning," and start your next chapter.
+      </p>
+    </div>
 
-        <div class="fade-in lg:col-span-5" id="contact">
-          <form class="rounded-[2rem] border border-forest/10 bg-forest p-6 shadow-soft sm:p-8">
-            <label
-              for="email"
-              class="mb-3 block text-sm uppercase tracking-[0.25em] text-sand/70"
-            >
-              Email Field
-            </label>
-            <div class="flex flex-col gap-3 sm:flex-row">
-              <input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                class="w-full rounded-full border border-white/10 bg-white/10 px-5 py-3.5 text-sand placeholder:text-sand/45 outline-none ring-0 focus:border-gold/50"
-              />
-              <button
-                type="submit"
-                class="rounded-full bg-gold px-6 py-3.5 text-sm font-medium text-white transition hover:opacity-95"
-              >
-                Download the Guide
-              </button>
-            </div>
-            <p class="mt-4 text-sm leading-6 text-sand/65">
-              A quiet, practical resource designed to bring you back into alignment.
-            </p>
-          </form>
+    <div class="fade-in lg:col-span-5" id="contact">
+      <form id="subscribe-form" class="rounded-[2rem] border border-forest/10 bg-forest p-6 shadow-soft sm:p-8">
+        abel
+          for="email"
+          class="mb-3 block text-sm uppercase tracking-[0.25em] text-sand/70"
+        >
+          Your Email
+        </label>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <input
+            id="email"
+            type="email"
+            placeholder="Enter your email"
+            required
+            class="w-full rounded-full border border-white/10 bg-white/10 px-5 py-3.5 text-sand placeholder:text-sand/45 outline-none ring-0 focus:border-gold/50"
+          />
+          <button
+            type="submit"
+            id="submit-btn"
+            class="rounded-full bg-gold px-6 py-3.5 text-sm font-medium text-white transition hover:opacity-95"
+          >
+            Download the Guide
+          </button>
         </div>
-      </div>
-    </section>
+        <p id="form-message" class="mt-4 text-sm leading-6 text-sand/65">
+          A quiet, practical resource designed to bring you back into alignment.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('subscribe-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const btn = document.getElementById('submit-btn');
+    const msg = document.getElementById('form-message');
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/functions/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (res.ok) {
+        msg.textContent = 'Check your inbox to confirm and receive the guide.';
+        msg.classList.add('text-gold');
+        document.getElementById('email').value = '';
+      } else {
+        msg.textContent = 'Something went wrong. Please try again.';
+      }
+    } catch (err) {
+      msg.textContent = 'Something went wrong. Please try again.';
+    }
+
+    btn.textContent = 'Download the Guide';
+    btn.disabled = false;
+  });
+</script>
   </main>
 
   <!-- FOOTER -->
